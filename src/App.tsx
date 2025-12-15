@@ -216,6 +216,7 @@ const App: React.FC = () => {
               <Activity size={16} /> Logic Debugger
             </h3>
             <div className="text-xs font-mono text-gray-500 space-y-1">
+              <p className="text-white font-bold">Current Speed: {context.speed} km/h</p>
               <p>Algorithm: {isSpotifyConnected ? "SPOTIFY_FILTER" : "LOCAL_V2"}</p>
               <p>Rule: {context.speed > 90 ? 'HIGH_SPEED_FOCUS' : (context.timeOfDay > 20 || context.timeOfDay < 5) ? 'NIGHT_MODE_RELAX' : 'STANDARD_ADAPTIVE'}</p>
               <p className={autoMode ? "text-green-500" : "text-yellow-500"}>
