@@ -38,7 +38,7 @@ const mapWmoToWeatherType = (code: number): DriveContext['weather'] => {
 };
 
 /**
- * Récupère la position GPS de l'utilisateur
+ * Récupère la position GPS de l'utilisateur (Ponctuel)
  */
 const getPosition = (): Promise<GeolocationPosition> => {
   return new Promise((resolve, reject) => {
@@ -76,12 +76,51 @@ export const getRealTimeContext = async (): Promise<Partial<DriveContext>> => {
     return {
       weather: mapWmoToWeatherType(data.current_weather.weathercode),
       timeOfDay: currentHour,
-      // Note : La vitesse (speed) reste simulée car on ne peut pas la lire via le navigateur 
-      // sans être en mouvement avec l'API Geolocation en mode 'watchPosition' (complexe pour un MVP web).
     };
 
   } catch (error) {
     console.error("Context Auto-Detection Failed:", error);
     throw error; // Renvoie l'erreur pour activer le mode manuel dans l'UI
   }
+};
+
+/**
+ * --- NOUVELLE FONCTION ---
+ * Surveille la vitesse en temps réel via le GPS du téléphone.
+ * Convertit la vitesse de m/s en km/h.
+ */
+export const watchRealTimeSpeed = (
+  onSpeedUpdate: (speedKmh: number) => void,
+  onError: (error: GeolocationPositionError) => void
+): number => {
+  if (!navigator.geolocation) {
+    // Erreur simulée si non supporté
+    const error: GeolocationPositionError = {
+      code: 2,
+      message: "Geolocation not supported",
+      PERMISSION_DENIED: 1,
+      POSITION_UNAVAILABLE: 2,
+      TIMEOUT: 3
+    };
+    onError(error);
+    return -1;
+  }
+
+  // watchPosition retourne un ID (number) pour pouvoir stopper l'écoute plus tard
+  return navigator.geolocation.watchPosition(
+    (position) => {
+      // position.coords.speed est en m/s (ou null si immobile/indisponible)
+      const speedMs = position.coords.speed || 0;
+      // Conversion m/s -> km/h
+      const speedKmh = Math.round(speedMs * 3.6);
+      
+      onSpeedUpdate(speedKmh);
+    },
+    (err) => onError(err),
+    {
+      enableHighAccuracy: true, // Important pour la précision de la vitesse
+      timeout: 5000,
+      maximumAge: 0
+    }
+  );
 };
