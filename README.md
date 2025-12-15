@@ -20,6 +20,10 @@ The application uses a weighted decision engine found in `services/recommendatio
 *   **Styling:** Tailwind CSS (for the dashboard UI)
 *   **Icons:** Lucide React
 
+## Install dependance
+npm install
+npm install --save-dev @vitejs/plugin-basic-ssl
+
 ## Project Structure
 *   `components/SensorControls.tsx`: Our simulation dashboard.
 *   `components/Playlist.tsx`: The visual output of the queue.
