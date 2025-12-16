@@ -5,7 +5,9 @@ AdaptiveDrive is our semester project for the **Web Application Development** co
 
 The core concept is an "context-aware" algorithm. Instead of a random shuffle, our application analyzes telemetry data (Speed, Time, Weather) to curate a playlist that matches the current driving environment.
 
-**Note:** Since we don't have access to a real vehicle's CAN bus, we built a "Sensor Control Panel" on the left side of the app to simulate the inputs.
+[We have made a website available so you don't have to install anything](https://tinyurl.com/adaptativedrive)
+>[!NOTE]
+>Since we don't have access to a real vehicle's CAN bus, we built a "Sensor Control Panel" on the left side of the app to simulate the inputs.
 
 ## How It Works
 The application uses a weighted decision engine found in `services/recommendationEngine.ts`.
@@ -20,9 +22,38 @@ The application uses a weighted decision engine found in `services/recommendatio
 *   **Styling:** Tailwind CSS (for the dashboard UI)
 *   **Icons:** Lucide React
 
-## Install dependance
-npm install
-npm install --save-dev @vitejs/plugin-basic-ssl
+## Getting started
+
+### Prerequisites
+Before running this project, make sure you have installed [Node.js](https://nodejs.org/) (Version 18 or higher).
+
+### Install & Setup
+
+```bash
+git clone [https://github.com/rodrigobol/application_software_engineering.git](https://github.com/rodrigobol/application_software_engineering.git)
+cd application_software_engineering
+```
+Run this command to install everything at once:
+```
+npm run setup
+```
+### Configure Environment Variables
+
+To enable Spotify features you need to: 
+
++ Create a .env file in the root directory.
++ Add the content of [.env.example](https://github.com/RODRIGOBOL/Application_Software_Engineering/blob/victor/.env.example) and modify it with your api keys.
+
+>[!NOTE]
+>If you don't have Spotify api keys, the app will run in "Simulation Mode" with local mock data.
+
+### Run the application
+
+Start the secure development server:
+```
+npm run dev
+```
+
 
 ## Project Structure
 *   `components/SensorControls.tsx`: Our simulation dashboard.
