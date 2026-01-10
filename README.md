@@ -42,7 +42,7 @@ npm run setup
 To enable Spotify features you need to: 
 
 + Create a .env file in the root directory.
-+ Add the content of [.env.example](https://github.com/RODRIGOBOL/Application_Software_Engineering/blob/victor/.env.example) and modify it with your api keys.
++ Add the content of [.env.example](https://github.com/RODRIGOBOL/Application_Software_Engineering/blob/main/.env.example) and modify it with your api keys.
 
 >[!NOTE]
 >If you don't have Spotify api keys, the app will run in "Simulation Mode" with local mock data.
