@@ -41,3 +41,35 @@ export interface DriveContext {
   timeOfDay: number;   // 24h format (0-23)
   weather: 'clear' | 'rain' | 'snow' | 'cloudy';
 }
+
+export interface SpotifyTrack {
+  id: string;
+  name: string;
+  artists: Array<{ name: string }>;
+  album: {
+    name: string;
+    images: Array<{ url: string }>;
+  };
+  duration_ms: number;
+  preview_url: string | null;
+  audio_features?: {
+    tempo: number;
+    energy: number;
+    valence: number;
+    danceability: number;
+  };
+}
+
+export interface DrivingContext {
+  speed: number;
+  time: Date;
+  weather: 'sunny' | 'rainy' | 'snowy' | 'cloudy';
+  roadType?: 'highway' | 'city' | 'countryside';
+  traffic?: 'heavy' | 'moderate' | 'light';
+}
+
+export interface SpeedData {
+  speed: number;
+  acceleration: number;
+  timestamp: number;
+}
