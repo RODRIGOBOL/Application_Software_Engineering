@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { DriveContext, Music } from './types';
 import { generatePlaylist } from './services/recommendationEngine'; // Moteur local (fallback)
 import { getRealTimeContext, watchRealTimeSpeed } from './services/weatherService'; // Services GPS/Météo
 import SpotifyService from './services/SpotifyService'; // Nouveau service Spotify
@@ -7,23 +6,23 @@ import SensorControls from './components/SensorControls';
 import Playlist from './components/Playlist';
 import { Activity, MapPin, RefreshCw, AlertTriangle, Music as MusicIcon } from 'lucide-react';
 
-const App: React.FC = () => {
+const App = () => {
   // --- ÉTAT DU CONTEXTE (Vitesse, Météo, Heure) ---
-  const [context, setContext] = useState<DriveContext>({
+  const [context, setContext] = useState({
     speed: 0,
     timeOfDay: new Date().getHours(),
     weather: 'clear'
   });
 
   // --- ÉTAT DE L'APPLICATION ---
-  const [playlist, setPlaylist] = useState<Music[]>([]);
+  const [playlist, setPlaylist] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [autoMode, setAutoMode] = useState<boolean>(true);
-  const [locationStatus, setLocationStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [autoMode, setAutoMode] = useState(true);
+  const [locationStatus, setLocationStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
   
   // --- ÉTAT SPOTIFY ---
   const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
-  const [rawSpotifyTracks, setRawSpotifyTracks] = useState<any[]>([]); // Cache des pistes brutes
+  const [rawSpotifyTracks, setRawSpotifyTracks] = useState([]); // Cache des pistes brutes
 
   // 1. INITIALISATION : Vérification Auth Spotify & Données Météo/GPS
   useEffect(() => {
@@ -87,17 +86,16 @@ const App: React.FC = () => {
         // --- MODE SPOTIFY ---
         // Ici, on filtrerait idéalement selon les features audio (tempo, energy).
         // Pour ce MVP, on simule un filtrage ou on mélange simplement.
-        // TODO: Appeler un algo plus complexe ici qui utilise context.speed vs track.tempo
         
         let adaptedTracks = [...rawSpotifyTracks];
 
         // Exemple simple : Si on roule vite (>90), on mélange pour avoir du neuf
         if (context.speed > 90) {
-           adaptedTracks.sort(() => Math.random() - 0.5);
+            adaptedTracks.sort(() => Math.random() - 0.5);
         }
         
         // Conversion au format de l'app
-        const formattedPlaylist: Music[] = adaptedTracks.slice(0, 10).map((t: any) => ({
+        const formattedPlaylist = adaptedTracks.slice(0, 10).map((t) => ({
           id: t.id,
           name: t.name,
           artist: t.artist,
@@ -110,7 +108,7 @@ const App: React.FC = () => {
 
       } else {
         // --- MODE LOCAL (SIMULATION) ---
-        // Utilise le fichier recommendationEngine.ts existant
+        // Utilise le fichier recommendationEngine.js existant
         const newPlaylist = generatePlaylist(context);
         setPlaylist(newPlaylist);
       }
@@ -144,7 +142,7 @@ const App: React.FC = () => {
     }
   };
 
-  const handleManualContextChange = (newContext: DriveContext) => {
+  const handleManualContextChange = (newContext) => {
     if (autoMode) setAutoMode(false);
     setContext(newContext);
   };

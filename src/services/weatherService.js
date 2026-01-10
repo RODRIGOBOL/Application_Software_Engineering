@@ -1,21 +1,10 @@
-import { DriveContext } from '../types';
-
-// Interface pour la réponse brute de l'API Open-Meteo
-interface OpenMeteoResponse {
-  current_weather: {
-    temperature: number;
-    windspeed: number;
-    weathercode: number;
-    is_day: number;
-    time: string;
-  };
-}
-
 /**
  * Mappe les codes WMO (World Meteorological Organization)
  * vers les types définis dans ton application.
+ * @param {number} code - Code météo WMO
+ * @returns {string} 'clear', 'cloudy', 'rain' ou 'snow'
  */
-const mapWmoToWeatherType = (code: number): DriveContext['weather'] => {
+const mapWmoToWeatherType = (code) => {
   // 0: Ciel dégagé
   if (code === 0) return 'clear';
   
@@ -39,8 +28,9 @@ const mapWmoToWeatherType = (code: number): DriveContext['weather'] => {
 
 /**
  * Récupère la position GPS de l'utilisateur (Ponctuel)
+ * @returns {Promise<GeolocationPosition>}
  */
-const getPosition = (): Promise<GeolocationPosition> => {
+const getPosition = () => {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
       reject(new Error("La géolocalisation n'est pas supportée par ce navigateur."));
@@ -51,8 +41,9 @@ const getPosition = (): Promise<GeolocationPosition> => {
 
 /**
  * Fonction principale : Récupère Météo + Heure locale réelles
+ * @returns {Promise<Object>} Contexte partiel (weather + timeOfDay)
  */
-export const getRealTimeContext = async (): Promise<Partial<DriveContext>> => {
+export const getRealTimeContext = async () => {
   try {
     // 1. Récupération Position (Latitude/Longitude)
     const position = await getPosition();
@@ -67,7 +58,7 @@ export const getRealTimeContext = async (): Promise<Partial<DriveContext>> => {
       throw new Error("Erreur lors de la récupération météo");
     }
 
-    const data: OpenMeteoResponse = await response.json();
+    const data = await response.json();
 
     // 3. Extraction de l'heure locale réelle
     const currentHour = new Date().getHours();
@@ -88,14 +79,14 @@ export const getRealTimeContext = async (): Promise<Partial<DriveContext>> => {
  * --- NOUVELLE FONCTION ---
  * Surveille la vitesse en temps réel via le GPS du téléphone.
  * Convertit la vitesse de m/s en km/h.
+ * @param {function(number):void} onSpeedUpdate - Callback avec la vitesse en km/h
+ * @param {function(Object):void} onError - Callback en cas d'erreur
+ * @returns {number} ID du watcher (pour le nettoyer plus tard)
  */
-export const watchRealTimeSpeed = (
-  onSpeedUpdate: (speedKmh: number) => void,
-  onError: (error: GeolocationPositionError) => void
-): number => {
+export const watchRealTimeSpeed = (onSpeedUpdate, onError) => {
   if (!navigator.geolocation) {
     // Erreur simulée si non supporté
-    const error: GeolocationPositionError = {
+    const error = {
       code: 2,
       message: "Geolocation not supported",
       PERMISSION_DENIED: 1,

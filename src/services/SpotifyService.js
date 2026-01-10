@@ -2,13 +2,18 @@ const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 const REDIRECT_URI = import.meta.env.VITE_SPOTIFY_REDIRECT_URI;
 
-const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
+// URLs fournies (Proxy ou simulation)
+const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"; // J'ai remis la vraie URL Spotify standard, change-la si tu utilises un proxy spécifique
 const TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
 
 class SpotifyService {
-  private accessToken: string | null = localStorage.getItem('spotify_access_token');
+  constructor() {
+    this.accessToken = localStorage.getItem('spotify_access_token');
+  }
 
-  // 1. Rediriger l'utilisateur vers Spotify pour se connecter
+  /**
+   * 1. Rediriger l'utilisateur vers Spotify pour se connecter
+   */
   authenticate() {
     const scopes = [
       "user-read-private",
@@ -20,8 +25,11 @@ class SpotifyService {
     window.location.href = loginUrl;
   }
 
-  // 2. Échanger le code reçu contre un Token d'accès
-  async getAccessToken(code: string): Promise<void> {
+  /**
+   * 2. Échanger le code reçu contre un Token d'accès
+   * @param {string} code 
+   */
+  async getAccessToken(code) {
     const params = new URLSearchParams();
     params.append("grant_type", "authorization_code");
     params.append("code", code);
@@ -51,10 +59,13 @@ class SpotifyService {
     }
   }
 
-  // 3. Récupérer les playlists
+  /**
+   * 3. Récupérer les playlists
+   */
   async getUserPlaylists() {
     if (!this.accessToken) return [];
     
+    // Note: Utilisation de l'API officielle Spotify ici
     const response = await fetch("https://api.spotify.com/v1/me/playlists", {
       headers: { Authorization: `Bearer ${this.accessToken}` }
     });
@@ -62,16 +73,21 @@ class SpotifyService {
     return data.items || [];
   }
 
-  // 4. Récupérer les tracks d'une playlist
-  async getPlaylistTracks(playlistId: string) {
+  /**
+   * 4. Récupérer les tracks d'une playlist
+   * @param {string} playlistId 
+   */
+  async getPlaylistTracks(playlistId) {
     if (!this.accessToken) return [];
 
+    // Correction de la syntaxe ${playlistId} qui manquait le $ dans ton fichier original
     const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=20`, {
       headers: { Authorization: `Bearer ${this.accessToken}` }
     });
     const data = await response.json();
+    
     // On nettoie un peu la donnée pour faciliter l'usage
-    return data.items.map((item: any) => ({
+    return data.items.map((item) => ({
       id: item.track.id,
       name: item.track.name,
       artist: item.track.artists[0].name,

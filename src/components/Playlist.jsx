@@ -1,13 +1,14 @@
 import React from 'react';
-import { Music } from '../types';
-import { Play, Clock, Music as MusicIcon } from 'lucide-react';
+import { Clock, Music as MusicIcon } from 'lucide-react';
 
-interface PlaylistProps {
-  tracks: Music[];
-}
-
-const Playlist: React.FC<PlaylistProps> = ({ tracks }) => {
-  if (tracks.length === 0) {
+/**
+ * Affiche la file d'attente des musiques et le titre en cours.
+ * * @param {Object} props
+ * @param {Array} props.tracks - La liste des objets musiques
+ */
+const Playlist = ({ tracks }) => {
+  // Cas où la liste est vide
+  if (!tracks || tracks.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-gray-500">
         <MusicIcon size={48} className="mb-2 opacity-50" />

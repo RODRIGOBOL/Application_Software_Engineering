@@ -1,10 +1,8 @@
-import { DriveContext, Music } from '../types';
 import { MUSIC_LIBRARY } from '../constants';
 
 /**
  * LOGIC CORE: musicController
- * 
- * This service simulates the backend controller that would normally receive 
+ * * This service simulates the backend controller that would normally receive 
  * telemetry data from the car and return a playlist.
  */
 
@@ -12,12 +10,21 @@ import { MUSIC_LIBRARY } from '../constants';
 // - Weather API (e.g., OpenWeatherMap) would be called here in a real app.
 // - GPS/Speed API would be passed via the `context` object.
 
-export const generatePlaylist = (context: DriveContext): Music[] => {
+/**
+ * Génère une playlist basée sur le contexte de conduite.
+ * * @param {Object} context - Les données de télémétrie
+ * @param {number} context.speed - La vitesse actuelle (km/h)
+ * @param {number} context.timeOfDay - L'heure de la journée (0-23)
+ * @param {string} context.weather - La météo ('clear', 'rain', etc.)
+ * @returns {Array} Une liste de musiques filtrées
+ */
+export const generatePlaylist = (context) => {
   const { speed, timeOfDay, weather } = context;
 
   console.log(`Analyzing Context: Speed=${speed}, Time=${timeOfDay}, Weather=${weather}`);
 
-  let preferredTypes: string[] = [];
+  /** @type {string[]} */
+  let preferredTypes = [];
 
   // --- RULE 1: High Speed (Safety/Focus) ---
   // If driving fast, maintain concentration with rhythm (Rock, Pop, Electro)

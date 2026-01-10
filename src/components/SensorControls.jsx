@@ -1,23 +1,23 @@
 import React from 'react';
-import { DriveContext } from '../types';
-import { Sun, CloudRain, Snowflake, Cloud, Gauge, Clock, CloudSun } from 'lucide-react';
+import { Sun, CloudRain, Snowflake, Cloud, Gauge } from 'lucide-react';
 
-interface SensorControlsProps {
-  context: DriveContext;
-  onContextChange: (newContext: DriveContext) => void;
-}
-
-const SensorControls: React.FC<SensorControlsProps> = ({ context, onContextChange }) => {
+/**
+ * Composant pour simuler les capteurs de la voiture (Vitesse, Météo, Temps)
+ * * @param {Object} props
+ * @param {Object} props.context - L'état actuel (vitesse, météo...)
+ * @param {Function} props.onContextChange - Fonction pour mettre à jour l'état
+ */
+const SensorControls = ({ context, onContextChange }) => {
   
-  const handleSpeedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSpeedChange = (e) => {
     onContextChange({ ...context, speed: parseInt(e.target.value) });
   };
 
-  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTimeChange = (e) => {
     onContextChange({ ...context, timeOfDay: parseInt(e.target.value) });
   };
 
-  const setWeather = (w: DriveContext['weather']) => {
+  const setWeather = (w) => {
     onContextChange({ ...context, weather: w });
   };
 

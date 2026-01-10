@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App';
+// Attention : on devra aussi convertir ce fichier s'il est en .tsx
 import { SpotifyCallback } from './components/SpotifyCallback';
 
 const rootElement = document.getElementById('root');

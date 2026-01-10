@@ -1,7 +1,19 @@
-import { Music } from './types';
-
 // Simulating the database of songs
-export const MUSIC_LIBRARY: Music[] = [
+
+/**
+ * @typedef {Object} Music
+ * @property {string} id
+ * @property {string} name
+ * @property {string} artist
+ * @property {number} duration
+ * @property {string} type
+ * @property {string} coverUrl
+ */
+
+/** * La bibliothèque musicale (Simule une Base de Données)
+ * @type {Music[]} 
+ */
+export const MUSIC_LIBRARY = [
   {
     id: '1',
     name: 'Morning Coffee',
