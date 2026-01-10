@@ -30,7 +30,7 @@ Before running this project, make sure you have installed [Node.js](https://node
 ### Install & Setup
 
 ```bash
-git clone [https://github.com/rodrigobol/application_software_engineering.git](https://github.com/rodrigobol/application_software_engineering.git)
+git clone https://github.com/rodrigobol/application_software_engineering.git
 cd application_software_engineering
 ```
 Run this command to install everything at once:
