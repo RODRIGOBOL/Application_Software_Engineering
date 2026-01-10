@@ -68,6 +68,8 @@ If we had more time, we would like to:
 *   Add a "Passenger Mode" so others can vote on the queue.
 
 ## Team
-*   Front-End Developer
-*   Algorithm Design
-*   UI/UX Designer
+*   Adam FERRE
+*   Franck POKAM
+*   Daniel ORDUY REY
+*   Victor NAVAS FERNANDEZ
+*   Vincent MOULY
